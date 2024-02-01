@@ -1,4 +1,4 @@
-export interface FiltroHistorialSolicitudesRequest{
+export class FiltroHistorialSolicitudesRequest{
     fechaInicio:string;
     fechaFin:string;
 }
