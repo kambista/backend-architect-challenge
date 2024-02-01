@@ -21,8 +21,6 @@ export class MongoDbSolicitudTipoCambioRepositoryImp implements SolicitudTipoCam
     async obtenerHistorial(data:FiltroHistorialSolicitudes): Promise<ItemSolicitudTipoCambio[]> {
         const connect = await MongoDbConnect.conectarBD();
         const collection = connect.collection("solicitudes")
-        console.log(DateTime.fromISO(data.fechaInicio.value).startOf("day").setZone("America/Lima").toJSDate());
-        console.log(DateTime.fromISO(data.fechaFin.value).endOf("day").setZone("America/Lima").toJSDate());
         
         const docs = await collection.find({fecha:{
             $gte:DateTime.fromISO(data.fechaInicio.value).startOf("day").setZone("America/Lima").toISO(),
@@ -52,7 +50,6 @@ export class MongoDbSolicitudTipoCambioRepositoryImp implements SolicitudTipoCam
         const connect = await MongoDbConnect.conectarBD();
         const collection = connect.collection("tipo_cambio")
         const ultimoRegistro = await collection.findOne({}, { sort: { fecha: -1 } });
-        console.log(ultimoRegistro);
         return new Moneda(ultimoRegistro.compra);
         
     }
