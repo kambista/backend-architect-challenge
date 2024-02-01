@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kambista-deployment
+  namespace: mi-namespace
+  labels:
+    app: kambista-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kambista-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: kambista-app
+    spec:
+      containers:
+        - name: kambista-app
+          image: kambistatest:v1.0.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

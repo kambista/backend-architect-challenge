@@ -1,0 +1,4 @@
+.terraform
+.terraform.*
+terraform.*
+credenciales_gcp.json

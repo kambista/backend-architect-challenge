@@ -13,7 +13,7 @@ export class MongoDbSolicitudTipoCambioRepositoryImp implements SolicitudTipoCam
     }
 
     async obtenerHistorial(data:FiltroHistorialSolicitudes): Promise<ItemSolicitudTipoCambio[]> {
-        throw new Error("Method not implemented.");
+        return []
     }
 
     async guardarCambio(data: TipoCambio): Promise<void> {

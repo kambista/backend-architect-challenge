@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ProveedorTipoCambioApplication } from 'src/Context/TipoCambio/Application/ProveedorTipoCambioApplication';
 import { SolicitudesApplication } from 'src/Context/TipoCambio/Application/SolicitudesApplication';
 
-@Controller('tipo-cambio')
+@Controller('api/v1/tipo-cambio')
 export class TipoCambioController {
     
     constructor(

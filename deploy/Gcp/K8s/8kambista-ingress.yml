@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kambista-ingress
+  namespace: mi-namespace
+  annotations:
+    cert-manager.io/cluster-issuer: "mi-cluster-issuer-letsencrypt"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: www.kambista.elviszapatero.tech
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: kambista-service
+                port:
+                  number: 81
+            path: /
+  tls:
+  - hosts:
+    - www.kambista.elviszapatero.tech
+    secretName: kambista-tls-secret

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+  namespace: mi-namespace
+  labels:
+    app: mongo-app
+spec:
+  type: ClusterIP
+  selector:
+    app: mongo-app
+  ports:
+    - name: http
+      port: 6379
+      targetPort: 6379

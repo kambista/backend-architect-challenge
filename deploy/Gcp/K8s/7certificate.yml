@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kambista-cert
+  namespace: mi-namespace
+spec:
+  secretName: kambista-tls-secret
+  issuerRef:
+    name: mi-cluster-issuer-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - www.kambista.elviszapatero.tech

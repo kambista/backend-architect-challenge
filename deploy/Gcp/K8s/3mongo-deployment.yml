@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  namespace: mi-namespace
+  labels:
+    app: mongo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mongo-app
+    spec:
+      containers:
+        - name: mongo-app
+          image: mongo
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6379
