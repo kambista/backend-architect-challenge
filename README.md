@@ -1,94 +1,99 @@
-# Kambista Backend Architect!
+<h1 align="center">
+  <br>
+  <img src="./assets/logo.png" alt="Markdownify" width="200">
+  <br>
+  PRUEBA TECNICA
+  <br>
+</h1>
 
-👋 Somos [Kambista](https://kambista.com) y estamos en la búsqueda de un nuevo miembro
-para nuestro equipo de tech que nos ayude a seguir ofreciendo la mejor experiencia de 
-cambio, para esto hemos preparado un reto técnico el cual pueden completar y enviarnos 
-el resultado con las siguientes instrucciones [instruciones de entrega](#-instruciones-de-entrega)
+## Tabla de contenido [![](./assets/pin.svg)](#table-of-contents)
 
-## 📓 Caso
-Se necesita crear una API interna que registre las solicitudes de cambio de moneda de los clientes.
-Como una operación de cambio necesita el TC (tipo de cambio) para poder realizar la conversión de la moneda,
-es necesario guardar el tipo de cambio de un proveedor cada 30 segundos.
-Se cuenta con la siguiente API para obtener el tipo de cambio de un proveedor:
-`https://api.apis.net.pe/v1/tipo-cambio-sunat`
+- [Arquitectura del proyecto](#ref1)
+- [Arquitectura de la infraestructura](#ref2)
+- [Documentación de la API](#ref3) 
+- [Levantar en local](#ref4) 
+- [Levantar en la nube](#ref5) 
+- [Extra - CI/CD](#ref6) 
 
-```json
-{
-  "compra": 3.733,
-  "venta": 3.739,
-  "origen": "SUNAT",
-  "moneda": "USD",
-  "fecha": "2024-01-18"
-}
-```
-El endpoint de la API interna debe esperar recibir del cliente la siguiente estructura:
-```json
-{
-  "monedaOrigen": "USD",
-  "monedaDestino": "PEN",
-  "monto": 100
-}
-```
-Dependiente del sentido de la operación de cambio, se debe calcular el monto de la operación de cambio y guarda
-la solicitud de cambio de la siguiente manera:
-```json
-{
-  "id": "xxxxxxxxxxxxx",
-  "monedaOrigen": "USD",
-  "monedaDestino": "PEN",
-  "monto": 100,
-  "montoCambiado": 373.3,
-  "tipoCambio": 3.733,
-  "fecha": "$TIME_STAMP"
-}
-```
-Finalmente, se debe crear un endpoint para obtener el historial de solicitudes de cambio de un cliente, el cual debe
-recibir la fecha de inicio y fin y devolver un conjunto de operacion de la siguiente manera:
-```json
-[
-  {
-    "id": "xxxxxxxxxxxxx",
-    "monedaOrigen": "USD",
-    "monedaDestino": "PEN",
-    "monto": 100,
-    "montoCambiado": 373.3,
-    "tipoCambio": 3.733,
-    "fecha": "$TIME_STAMP"
-  },
-  {
-    "id": "xxxxxxxxxxxxx",
-    "monedaOrigen": "USD",
-    "monedaDestino": "PEN",
-    "monto": 100,
-    "montoCambiado": 373.3,
-    "tipoCambio": 3.733,
-    "fecha": "$TIME_STAMP"
-  }
-]
-```
-De ser necesario o considerarlo conveniente, se puede agregar algunas validaciones para mantener la consistencia
-de los datos y la funcionalidad de la API.
 
-## 🖥️ Tecnologías
+## 1. Arquitectura del proyecto[![](./assets/pin.svg)](#ref1)
 
-Para el desarrollo de la solución se debe utilizar las siguientes tecnologías:
-- Lenguaje de programación: `NodeJS` con `Typescript`
-- Se puede utilizar cualquier framework de NodeJS
-- Base de datos: `MongoDB`
-- Arquitectura: `Clean Architecture` `DDD`
-- Se debe utilizar `Kubernetes` para el despliegue de la solución.
-- La solución debe contar con una batería de pruebas unitarias y/o de integración.
-- La API debe estar documentada.
-- La solución debe contar con unas instrucciones de despliegue local (Kubernetes).
-- La solución debe contar con unas instrucciones de despliegue en Kubernetes en la nube `gcp`. Deseable
-- De haberlo dezplegado en la nube, se debe entrar en link público de la API.
-- Se debe utilizar `Git` para el control de versiones. Se tendrá en cuenta la historia de los cambios.
+La estructura del proyecto fue creada usando <b>Arquitectura Hexagonal</b> siguiendo un enfoque en el dominio con <b>DDD(Domain-Driven-Design)</b>.
 
-## 📍 Instruciones de entrega
+Representacion gráfica:
 
-- Se necesita crear un fork del proyecto y crear un pull request con la solución.
-- Es necesario notificar a la persona que te contacto para que revise la solución en el momento de completar la prueba.
-- En la siguiente etapa se realizará una entrevista técnica para revisar la solución.
-- El tiempo estimado para completar la prueba es de 7 días desde el inicio de la misma.
+<div align="center" style="padding:10px; background:white;border-radius:5px"><img src="./assets/img2.png" style="width:70%;height:70%;"/></div>
 
-Quedamos atentos a cualquier consulta adicional, muchos éxitos! 🚀
+
+## 2. Arquitectura de la infraestructura[![](./assets/pin.svg)](#ref5)
+
+El despliegue en la nube de Google sigue la siguiente estructura: 
+
+<div align="center" style="padding:10px; background:white;border-radius:5px"><img src="./assets/img4.png" style="width:70%;height:70%;"/></div>
+
+<br> 
+
+
+## 4. Documentacion de la API[![](./assets/pin.svg)](#ref4)
+
+Cada servicio creado esta documentado usando Swagger que tiene una amigable integracion con NestJS:
+
+<div align="center" style="padding:10px; background:white;border-radius:5px"><img src="./assets/img5.png" style="width:100%;height:70%;"/></div>
+
+## 3. Levantar en local[![](./assets/pin.svg)](#ref1)
+
+Se debe tener instalado Docker y Minikube en la pc en donde se de sea probar la aplicacion.
+
+- Iniciar minikube
+  ```bash
+  minikube start
+  minikube dashboard
+  ```
+- Cambiar el contexto de docker para que apunto al registry de minikube
+  ```bash
+  eval $(minikube docker-env)
+  ```
+- Compilar el proyecto
+  ```bash
+  cd ./backend && npm run build
+  ```
+- Posicionarse en la raiz del proyecto y contruir la imagen
+  ```bash
+  docker build -t kambistatest:v1.0.0  -f deploy/Gcp/Docker/Dockerfile .
+  ```
+- Ejecutar cada archivo yml de la ruta ./deploy/Local/K8s/*
+  ```bash
+  cd deploy/Local/K8s/
+  kubectl apply -f ./1kambista-namespace.yml
+  kubectl apply -f ./2kambista-deployment.yml
+  kubectl apply -f ./3mongo-deployment.yml
+  kubectl apply -f ./4kambista-service.yml
+  kubectl apply -f ./4kambista-service.yml
+  kubectl apply -f ./5mongo-service.yml
+  kubectl apply -f ./6kambista-ingress.yml
+  ```
+- Ingresar a la url generada en el dashboard de minikube
+  ```bash
+  --
+  ```
+
+## 3. Levantar en la nube[![](./assets/pin.svg)](#ref1)
+
+Se debe tener instalado el SDK de google, Kubectl y Terraform.
+
+- Contruir la imagen en local o en un runner
+- Subir la imagen al registry de google
+- Crear la infraestructura con terraform en la nube
+- Conectarse al cluster K8s
+- Instalar el nginx controller
+- Instalar el cert manager
+- Ejecutar cada archivo yml
+- Ingresar a la url
+ 
+## 4. Extra - CI/CD[![](./assets/pin.svg)](#ref4)
+
+Para automatizar todo el proceso desde la creacion del proyecto hasta el despliegue:
+
+<div align="center" style="padding:10px; background:white;border-radius:5px"><img src="./assets/img3.png" style="width:70%;height:70%;"/></div>
+
+Gracias...

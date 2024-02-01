@@ -47,7 +47,7 @@ describe("TipoCambioController prueba de integracion", () => {
 
 	describe("Generar una solicitud", () => {
 		it("Deberia guardar y retornar la informacion correcta", async () => {
-			const dataSend = {
+			const dataSend:any = {
 				monedaOrigen: "PEN",
 				monedaDestino: "USD",
 				monto: 3.799,

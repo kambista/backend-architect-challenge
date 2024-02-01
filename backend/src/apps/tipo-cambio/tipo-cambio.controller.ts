@@ -21,7 +21,7 @@ export class TipoCambioController {
 
     @Post("crear-solicitud")
     @ApiOperation({summary:"Servicio para crear una solicitud de compra"})
-    async generarSolicitud(@Body() data: any):Promise<any>{
+    async generarSolicitud(@Body() data: NuevaSolicitudTipoCambioRequest):Promise<any>{
         return await this.solicitudAplicacion.generarSolicitudCambio(data);
     }
 
