@@ -7,6 +7,7 @@ import { SolicitudTipoCambioRepository } from "../Domain/SolicitudTipoCambioRepo
 import { MongoDbConnect } from "src/Context/Shared/Infrastructure/MongoDbConnect";
 import { Uuid } from "src/Context/Shared/Domain/ValueObject/Uuid";
 import { Moneda } from "../Domain/Properties/Moneda";
+import { DateTime } from "luxon";
 
 @Injectable()
 export class MongoDbSolicitudTipoCambioRepositoryImp implements SolicitudTipoCambioRepository{
@@ -20,8 +21,13 @@ export class MongoDbSolicitudTipoCambioRepositoryImp implements SolicitudTipoCam
     async obtenerHistorial(data:FiltroHistorialSolicitudes): Promise<ItemSolicitudTipoCambio[]> {
         const connect = await MongoDbConnect.conectarBD();
         const collection = connect.collection("solicitudes")
-        const docs = await collection.find({}).toArray();
-        console.log(docs);
+        console.log(DateTime.fromISO(data.fechaInicio.value).startOf("day").setZone("America/Lima").toJSDate());
+        console.log(DateTime.fromISO(data.fechaFin.value).endOf("day").setZone("America/Lima").toJSDate());
+        
+        const docs = await collection.find({fecha:{
+            $gte:DateTime.fromISO(data.fechaInicio.value).startOf("day").setZone("America/Lima").toISO(),
+            $lte:DateTime.fromISO(data.fechaFin.value).endOf("day").setZone("America/Lima").toISO(),
+        }}).toArray();
         
         return docs.map(v=>{
             return ItemSolicitudTipoCambio.create({

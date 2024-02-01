@@ -4,6 +4,7 @@ import { ItemSolicitudTipoCambio } from "../../Domain/Entities/ItemSolicitudTipo
 import { Moneda } from "../../Domain/Properties/Moneda";
 import { SolicitudTipoCambioRepository } from "../../Domain/SolicitudTipoCambioRepository";
 import { CurrencyConverterStrategy } from "./CurrencyConverterStrategy";
+import { DateTime } from "luxon";
 
 export class DollarToSolConverter implements CurrencyConverterStrategy{
     
@@ -18,7 +19,7 @@ export class DollarToSolConverter implements CurrencyConverterStrategy{
             monto:amount,
             montoCambiado:amount*tipoCambio.value,
             tipoCambio:tipoCambio.value,
-            fecha:"sadsd",
+            fecha:DateTime.now().setZone("America/Lima").toISO(),
         })
     }
 
