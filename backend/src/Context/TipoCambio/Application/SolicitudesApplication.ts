@@ -1,11 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { SolicitudTipoCambioRepository } from "../Domain/SolicitudTipoCambioRepository";
 import { NuevaSolicitudTipoCambioRequest } from "./Request/NuevaSolicitudTipoCambioRequest";
-import { SolicitudTipoCambio } from "../Domain/Entities/SolicitudTipoCambio";
 import { ItemSolicitudTipoCambio } from "../Domain/Entities/ItemSolicitudTipoCambio";
 import { Primitives } from "src/Context/Shared/Domain/Primitives";
 import { FiltroHistorialSolicitudesRequest } from "./Request/FiltroHistorialSolicitudesRequest";
 import { FiltroHistorialSolicitudes } from "../Domain/Criteria/FiltroHistorialSolicitudes";
+import { CurrencyConverterContext } from "./Converters/CurrencyConverterContext";
 
 @Injectable()
 export class SolicitudesApplication{
@@ -14,8 +14,10 @@ export class SolicitudesApplication{
     ){}
 
     async generarSolicitudCambio(data:NuevaSolicitudTipoCambioRequest):Promise<Primitives<ItemSolicitudTipoCambio>>{
-        const resp = await this.repository.generarSolicitudCambio(SolicitudTipoCambio.create(data));
-        return resp.toPrimitives();
+        const converterContext = new CurrencyConverterContext(this.repository);
+        const itemSolicitud = await converterContext.convert(data.monto, data.monedaOrigen, data.monedaDestino);
+        await this.repository.generarSolicitudCambio(itemSolicitud);
+        return itemSolicitud.toPrimitives();
     }
 
     async obtenerHistorial(data:FiltroHistorialSolicitudesRequest):Promise<Primitives<ItemSolicitudTipoCambio>[]>{

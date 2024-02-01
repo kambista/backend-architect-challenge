@@ -1,9 +1,0 @@
-version: "3.3"
-services: 
-
-  etcelocal:
-    tty: true
-    image: ctce:v1.0.0
-    container_name: etcelocal
-    ports:
-      - "5559:80"

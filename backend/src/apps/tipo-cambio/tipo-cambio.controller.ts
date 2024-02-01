@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ProveedorTipoCambioApplication } from 'src/Context/TipoCambio/Application/ProveedorTipoCambioApplication';
+import { NuevaSolicitudTipoCambioRequest } from 'src/Context/TipoCambio/Application/Request/NuevaSolicitudTipoCambioRequest';
 import { SolicitudesApplication } from 'src/Context/TipoCambio/Application/SolicitudesApplication';
 
 @Controller('api/v1/tipo-cambio')
@@ -16,7 +17,7 @@ export class TipoCambioController {
     }
 
     @Post("crear-solicitud")
-    async generarSolicitud(@Body() data: any):Promise<any>{
+    async generarSolicitud(@Body() data: NuevaSolicitudTipoCambioRequest):Promise<any>{
         return await this.solicitudAplicacion.generarSolicitudCambio(data);
     }
 
