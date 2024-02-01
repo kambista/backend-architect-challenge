@@ -11,7 +11,7 @@ import { ConfigModule } from "@nestjs/config";
 @Module({
 	imports: [
 		ConfigModule.forRoot({
-			envFilePath: ['.env'],
+			envFilePath: [".env"],
 			isGlobal: true,
 		}),
 	],
@@ -21,12 +21,12 @@ import { ConfigModule } from "@nestjs/config";
 			provide: ProveedorTipoCambioRepository,
 			useClass: SunatProveedorTipoCambioRepositoryImp,
 		},
-    {
-      provide: SolicitudTipoCambioRepository,
-      useClass: MongoDbSolicitudTipoCambioRepositoryImp,
-    },
+		{
+			provide: SolicitudTipoCambioRepository,
+			useClass: MongoDbSolicitudTipoCambioRepositoryImp,
+		},
 		ProveedorTipoCambioApplication,
-    SolicitudesApplication,
+		SolicitudesApplication,
 	],
 })
 export class AppModule {}
