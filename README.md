@@ -62,19 +62,51 @@ Se debe tener instalado Docker y Minikube en la pc en donde se de sea probar la 
   docker build -t kambistatest:v1.0.0  -f deploy/Gcp/Docker/Dockerfile .
   ```
 - Ejecutar cada archivo yml de la ruta ./deploy/Local/K8s/*
+  - Crear la base de datos
+    ```bash
+    cd deploy/Local/K8s/
+    kubectl apply -f ./1kambista-namespace.yml
+    kubectl apply -f ./2mongo-deployment.yml
+    kubectl apply -f ./3mongo-service.yml
+    ```
+  - Debido a un error en minikube, puede que aparescan con el DNS al llamar un servicio desde un pod.
+    - Ingresar al dashboard de Minikube
+    - Buscar el servicio de mongo, copiar la IP del endpoint
+    - Cambiar el valor a la variable DB_HOST en el archivo deploy/Local/K8s/4kambista-deployment.yml
+
+  - Crear la aplicacion
+    ```bash
+    kubectl apply -f ./4kambista-deployment.yml
+    kubectl apply -f ./5kambista-service.yml
+    kubectl apply -f ./6kambista-ingress.yml
+    ```
+  
+  - Ejecutar cronjob - copiar la ip del endpoint del kambista-service y pegar en la url del archivo ./7kambista-cronjob.yml
+    ```bash
+    kubectl apply -f ./7kambista-cronjob.yml
+    ```
+
+  - Ver la direccion la Ip del ingress
+    ```bash
+    kubectl get ingress --namespace mi-namespace
+    ```
+  
+  - Ver los servicios levantados en swagger - ingresar a la url
+    ```bash
+    http://${IP_INGRESS}/api/docs
+    ```
+
+  - Ver la data en mongo, ingresar al pod
+    ```bash
+    mongosh -u root -p example
+    use admin
+    db.tipo_cambio.find().size()
+    ```
+
+- Eliminar todos los recursos creados
   ```bash
-  cd deploy/Local/K8s/
-  kubectl apply -f ./1kambista-namespace.yml
-  kubectl apply -f ./2kambista-deployment.yml
-  kubectl apply -f ./3mongo-deployment.yml
-  kubectl apply -f ./4kambista-service.yml
-  kubectl apply -f ./4kambista-service.yml
-  kubectl apply -f ./5mongo-service.yml
-  kubectl apply -f ./6kambista-ingress.yml
-  ```
-- Ingresar a la url generada en el dashboard de minikube
-  ```bash
-  --
+  kubectl delete all --all -n mi-namespace
+  kubectl delete namespaces mi-namespace
   ```
 
 ## 3. Levantar en la nube[![](./assets/pin.svg)](#ref1)

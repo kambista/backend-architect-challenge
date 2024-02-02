@@ -33,7 +33,7 @@ COPY ./deploy/Gcp/Docker/supervisor/supervisord.conf /etc/supervisord.conf
 
 WORKDIR /var/www/app/backend/dist
 COPY ./backend/package.json /var/www/app/backend/dist/package.json
-COPY ./backend/.env /var/www/app/backend/dist/.env
+COPY ./deploy/Gcp/Docker/.env /var/www/app/backend/dist/.env
 RUN npm install --production
 
 WORKDIR /

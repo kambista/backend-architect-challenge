@@ -21,5 +21,10 @@ spec:
         - name: kambista-app
           image: kambistatest:v1.0.0
           imagePullPolicy: Never
+          env:
+          - name: GET_HOSTS_FROM
+            value: dns
+          - name: DB_HOST
+            value: 10.244.0.180
           ports:
             - containerPort: 80
