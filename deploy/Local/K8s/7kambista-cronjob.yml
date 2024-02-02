@@ -23,4 +23,4 @@ spec:
           args:
           - /bin/sh
           - -c
-          - "while true; do curl -X GET http://10.244.0.182/api/v1/tipo-cambio/cron-job; sleep 30; done"
+          - "while true; do curl -X GET http://kambista-service/api/v1/tipo-cambio/cron-job; sleep 30; done"

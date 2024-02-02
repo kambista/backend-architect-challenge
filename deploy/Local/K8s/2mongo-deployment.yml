@@ -23,8 +23,6 @@ spec:
           ports:
             - containerPort: 27017
           env:
-          - name: GET_HOSTS_FROM
-            value: dns
           - name: MONGO_INITDB_ROOT_USERNAME
             value: root
           - name: MONGO_INITDB_ROOT_PASSWORD

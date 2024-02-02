@@ -59,49 +59,38 @@ Se debe tener instalado Docker y Minikube en la pc en donde se de sea probar la 
   ```
 - Posicionarse en la raiz del proyecto y contruir la imagen
   ```bash
-  docker build -t kambistatest:v1.0.0  -f deploy/Gcp/Docker/Dockerfile .
+  docker build -t kambistatest:v1.0.0  -f deploy/Local/Docker/Dockerfile .
   ```
 - Ejecutar cada archivo yml de la ruta ./deploy/Local/K8s/*
-  - Crear la base de datos
-    ```bash
-    cd deploy/Local/K8s/
-    kubectl apply -f ./1kambista-namespace.yml
-    kubectl apply -f ./2mongo-deployment.yml
-    kubectl apply -f ./3mongo-service.yml
-    ```
-  - Debido a un error en minikube, puede que aparescan con el DNS al llamar un servicio desde un pod.
-    - Ingresar al dashboard de Minikube
-    - Buscar el servicio de mongo, copiar la IP del endpoint
-    - Cambiar el valor a la variable DB_HOST en el archivo deploy/Local/K8s/4kambista-deployment.yml
+  ```bash
+  cd deploy/Local/K8s/
+  kubectl apply -f ./1kambista-namespace.yml
+  kubectl apply -f ./2mongo-deployment.yml
+  kubectl apply -f ./3mongo-service.yml
 
-  - Crear la aplicacion
-    ```bash
-    kubectl apply -f ./4kambista-deployment.yml
-    kubectl apply -f ./5kambista-service.yml
-    kubectl apply -f ./6kambista-ingress.yml
-    ```
+  kubectl apply -f ./4kambista-deployment.yml
+  kubectl apply -f ./5kambista-service.yml
+  kubectl apply -f ./6kambista-ingress.yml
+
+  kubectl apply -f ./7kambista-cronjob.yml
+  ```
+
+- Ver la direccion la Ip del ingress
+  ```bash
+  kubectl get ingress --namespace mi-namespace
+  ```
   
-  - Ejecutar cronjob - copiar la ip del endpoint del kambista-service y pegar en la url del archivo ./7kambista-cronjob.yml
-    ```bash
-    kubectl apply -f ./7kambista-cronjob.yml
-    ```
+- Ver los servicios levantados en swagger - ingresar a la url
+  ```bash
+  http://${IP_INGRESS}/api/docs
+  ```
 
-  - Ver la direccion la Ip del ingress
-    ```bash
-    kubectl get ingress --namespace mi-namespace
-    ```
-  
-  - Ver los servicios levantados en swagger - ingresar a la url
-    ```bash
-    http://${IP_INGRESS}/api/docs
-    ```
-
-  - Ver la data en mongo, ingresar al pod
-    ```bash
-    mongosh -u root -p example
-    use admin
-    db.tipo_cambio.find().size()
-    ```
+- Ver la data en mongo, ingresar al pod
+  ```bash
+  mongosh -u root -p example
+  use admin
+  db.tipo_cambio.find().size()
+  ```
 
 - Eliminar todos los recursos creados
   ```bash
@@ -114,13 +103,72 @@ Se debe tener instalado Docker y Minikube en la pc en donde se de sea probar la 
 Se debe tener instalado el SDK de google, Kubectl y Terraform.
 
 - Contruir la imagen en local o en un runner
+  ```bash
+  cd ./backend && npm run build
+  docker build -t kambistatest:v1.0.0  -f deploy/Gcp/Docker/Dockerfile .
+  ```
+
 - Subir la imagen al registry de google
+  ```bash
+  docker login -u _json_key -p "$(cat ./deploy/Gcp/Terraform/credenciales_gcp.json)" https://us.gcr.io
+  docker tag kambistatest:v1.0.0  us.gcr.io/ace-rider-182920/kambistatest:v1.0.0
+  docker push us.gcr.io/ace-rider-182920/kambistatest:v1.0.0 
+  ```
+
 - Crear la infraestructura con terraform en la nube
+  ```bash
+  cd ./deploy/Gcp/Terraform
+  terraform init
+  terraform apply
+  ```
+
 - Conectarse al cluster K8s
+  ```bash
+  gcloud container clusters get-credentials my-cluster --zone us-east4-c --project ace-rider-182920
+  ```
+
 - Instalar el nginx controller
+  ```bash
+  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  helm repo update
+  helm install nginx-ingress ingress-nginx/ingress-nginx
+  kubectl get service nginx-ingress-ingress-nginx-controller
+  ```
+
 - Instalar el cert manager
+  ```bash
+  helm repo add jetstack https://charts.jetstack.io
+  helm repo update
+  helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.10.0 --set installCRDs=true
+  kubectl -n cert-manager get pod
+  ```
+
+- Crear los certificados
+  ```bash
+  cd ./deploy/Gcp/K8s
+  kubectl apply -f ./1kambista-namespace.yml
+
+  kubectl apply -f ./clusterissuer.yml
+  kubectl get clusterissuer
+  kubectl describe  clusterissuer mi-cluster-issuer
+
+  kubectl apply -f ./certificate.yml 
+  kubectl get certificate --all-namespaces
+  kubectl describe certificate kambista-cert -n mi-namespace
+  kubectl get secrets --all-namespaces
+  ```
+
 - Ejecutar cada archivo yml
-- Ingresar a la url
+  ```bash
+  kubectl apply -f ./2mongo-deployment.yml
+  kubectl apply -f ./3mongo-service.yml
+  kubectl apply -f ./4kambista-deployment.yml
+  kubectl apply -f ./5kambista-service.yml
+  kubectl apply -f ./6kambista-ingress.yml
+  ```
+
+- Ver los servicios en swagger
+
  
 ## 4. Extra - CI/CD[![](./assets/pin.svg)](#ref4)
 

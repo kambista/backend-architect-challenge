@@ -26,18 +26,18 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 COPY ./backend/dist /var/www/app/backend/dist
 
-COPY ./deploy/Gcp/Docker/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./deploy/Gcp/Docker/nginx/sites-enabled/default.conf /etc/nginx/sites-enabled/default.conf
+COPY ./deploy/Local/Docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./deploy/Local/Docker/nginx/sites-enabled/default.conf /etc/nginx/sites-enabled/default.conf
 
-COPY ./deploy/Gcp/Docker/supervisor/supervisord.conf /etc/supervisord.conf
+COPY ./deploy/Local/Docker/supervisor/supervisord.conf /etc/supervisord.conf
 
 WORKDIR /var/www/app/backend/dist
 COPY ./backend/package.json /var/www/app/backend/dist/package.json
-COPY ./deploy/Gcp/Docker/.env /var/www/app/backend/dist/.env
+COPY ./deploy/Local/Docker/.env /var/www/app/backend/dist/.env
 RUN npm install --production
 
 WORKDIR /
-COPY ./deploy/Gcp/Docker/start.sh /start.sh
+COPY ./deploy/Local/Docker/start.sh /start.sh
 RUN chmod 777 /start.sh
 
 EXPOSE 80

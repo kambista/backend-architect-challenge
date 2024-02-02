@@ -8,11 +8,11 @@ variable "PATH_CREDENTIALS" {
 }
 variable "CLOUD_REGION" {
     description = "Region"
-    default = "us-central1"
+    default = "us-east4"
 }
 variable "CLOUD_ZONE" {
     description = "Zona"
-    default = "us-central1-b"
+    default = "us-east4-c"
 }
 variable "SUBNET_CIDR" {
     description = "Cidr subnet"

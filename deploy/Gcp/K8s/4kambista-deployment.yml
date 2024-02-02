@@ -19,7 +19,9 @@ spec:
     spec:
       containers:
         - name: kambista-app
-          image: nginx
-          imagePullPolicy: Always
+          image: us.gcr.io/ace-rider-182920/kambistatest:v1.0.0
+          env:
+          - name: DB_HOST
+            value: "mongo-service"
           ports:
             - containerPort: 80
