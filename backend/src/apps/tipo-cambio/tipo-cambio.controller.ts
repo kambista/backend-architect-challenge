@@ -25,9 +25,9 @@ export class TipoCambioController {
         return await this.solicitudAplicacion.generarSolicitudCambio(data);
     }
 
-    @Get("hisotial-solicitudes/:inicio/:fin")
-    @ApiParam({name:"inicio", description:"Fecha de inicio"})
-    @ApiParam({name:"fin", description:"Fecha de fin"})
+    @Get("historial-solicitudes/:inicio/:fin")
+    @ApiParam({name:"inicio", description:"Fecha de inicio 2020-01-01"})
+    @ApiParam({name:"fin", description:"Fecha de fin 2025-12-31"})
     @ApiOperation({summary:"Historial de todas las solicitudes en un rango de fechas"})
     async historialSolicitudes(@Param('inicio') fechaInicio:any, @Param('fin') fechaFin:any):Promise<any>{
         return await this.solicitudAplicacion.obtenerHistorial({fechaInicio, fechaFin})
