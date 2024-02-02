@@ -8,12 +8,12 @@
 
 ## Tabla de contenido [![](./assets/pin.svg)](#table-of-contents)
 
-- [Arquitectura del proyecto](#ref1)
-- [Arquitectura de la infraestructura](#ref2)
-- [Documentación de la API](#ref3) 
-- [Levantar en local](#ref4) 
-- [Levantar en la nube](#ref5) 
-- [Extra - CI/CD](#ref6) 
+- [1. Arquitectura del proyecto](#ref1)
+- [2. Arquitectura de la infraestructura](#ref2)
+- [3. Documentación de la API](#ref3) 
+- [4. Levantar en local](#ref4) 
+- [5. Levantar en la nube](#ref5) 
+- [6. Extra - CI/CD](#ref6) 
 
 
 ## 1. Arquitectura del proyecto[![](./assets/pin.svg)](#ref1)
@@ -25,7 +25,7 @@ Representacion gráfica:
 <div align="center" style="padding:10px; background:white;border-radius:5px"><img src="./assets/img2.png" style="width:70%;height:70%;"/></div>
 
 
-## 2. Arquitectura de la infraestructura[![](./assets/pin.svg)](#ref5)
+## 2. Arquitectura de la infraestructura[![](./assets/pin.svg)](#ref2)
 
 El despliegue en la nube de Google sigue la siguiente estructura: 
 
@@ -34,13 +34,13 @@ El despliegue en la nube de Google sigue la siguiente estructura:
 <br> 
 
 
-## 4. Documentacion de la API[![](./assets/pin.svg)](#ref4)
+## 3. Documentacion de la API[![](./assets/pin.svg)](#ref3)
 
 Cada servicio creado esta documentado usando Swagger que tiene una amigable integracion con NestJS:
 
 <div align="center" style="padding:10px; background:white;border-radius:5px"><img src="./assets/img5.png" style="width:100%;height:70%;"/></div>
 
-## 3. Levantar en local[![](./assets/pin.svg)](#ref1)
+## 4. Levantar en local[![](./assets/pin.svg)](#ref4)
 
 Se debe tener instalado Docker y Minikube en la pc en donde se de sea probar la aplicacion.
 
@@ -98,7 +98,7 @@ Se debe tener instalado Docker y Minikube en la pc en donde se de sea probar la 
   kubectl delete namespaces mi-namespace
   ```
 
-## 3. Levantar en la nube[![](./assets/pin.svg)](#ref1)
+## 5. Levantar en la nube[![](./assets/pin.svg)](#ref5)
 
 Se debe tener instalado el SDK de google, Kubectl y Terraform.
 
@@ -165,12 +165,19 @@ Se debe tener instalado el SDK de google, Kubectl y Terraform.
   kubectl apply -f ./4kambista-deployment.yml
   kubectl apply -f ./5kambista-service.yml
   kubectl apply -f ./6kambista-ingress.yml
+  kubectl apply -f ./7kambista-cronjob.yml
   ```
 
-- Ver los servicios en swagger
-
+- IMPORTANTE!!! Debido a los altos costos de GKE, en caso de querer revisar lo desplegado me avisan 1h antes para levantar el cluster.
+  ```bash
+  https://www.kambista.elviszapatero.tech/api/docs
+  ```
+- Eliminar el cluster
+  ```bash
+  terraform destroy
+  ```
  
-## 4. Extra - CI/CD[![](./assets/pin.svg)](#ref4)
+## 6. Extra - CI/CD[![](./assets/pin.svg)](#ref6)
 
 Para automatizar todo el proceso desde la creacion del proyecto hasta el despliegue:
 

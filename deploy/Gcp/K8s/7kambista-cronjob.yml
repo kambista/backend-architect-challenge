@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kambista-cronjob-deployment
+  namespace: mi-namespace
+  labels:
+    app: kambista-cronjob
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kambista-cronjob
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: kambista-cronjob
+    spec:
+      containers:
+        - name: cronjob
+          image: curlimages/curl:latest
+          args:
+          - /bin/sh
+          - -c
+          - "while true; do curl -X GET http://kambista-service/api/v1/tipo-cambio/cron-job; sleep 30; done"
