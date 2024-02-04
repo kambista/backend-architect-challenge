@@ -92,3 +92,12 @@ Para el desarrollo de la solución se debe utilizar las siguientes tecnologías:
 - El tiempo estimado para completar la prueba es de 7 días desde el inicio de la misma.
 
 Quedamos atentos a cualquier consulta adicional, muchos éxitos! 🚀
+
+
+# Solucion Planteada
+
+#### Hecho por: Gustavo Condezo
+
+![Diagrama Solucion](diagrama_componentes_v1.jpg)
+
+TODO: Definir la forma de activar el servicio que consume la API Sunat cada 30 Segundos. Cron solo toma como minimo 1 minuto.
