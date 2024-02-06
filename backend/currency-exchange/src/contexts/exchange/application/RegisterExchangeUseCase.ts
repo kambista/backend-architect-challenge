@@ -17,10 +17,11 @@ export class RegisterExchangeUseCase {
     if (!this.idValidOperation(data)) throw Error('Operation Invalid');
 
     const conversion = await this.conversionRepository.obtainConversion();
-    const tipoCambio = this.getTipoCambio(
+    const { tipoCambio, montoCambiado } = this.getTipoCambio(
       data.monedaOrigen,
       data.monedaDestino,
       conversion,
+      data.monto,
     );
     if (!tipoCambio) throw new Error('Convertion not handled');
     return await this.exchangeRepository.saveRequestCurrencyExchange({
@@ -30,7 +31,7 @@ export class RegisterExchangeUseCase {
       createdAt: new Date(),
       monto: data.monto,
       monedaDestino: data.monedaDestino,
-      montoCambiado: data.monto * tipoCambio,
+      montoCambiado,
       tipoCambio,
       updatedAt: new Date(),
     });
@@ -44,18 +45,27 @@ export class RegisterExchangeUseCase {
     currencyOrigin: CurrencyEnum,
     currencyDestiny: CurrencyEnum,
     conversion: ConversionEntity,
-  ) {
+    monto: number,
+  ): { tipoCambio: number; montoCambiado: number } {
     if (
       currencyOrigin == CurrencyEnum.PEN &&
       currencyDestiny == CurrencyEnum.USD
     ) {
-      return conversion.venta;
+      return {
+        tipoCambio: conversion.venta,
+        montoCambiado: Math.round((monto / conversion.venta) * 1000) / 1000,
+      };
     }
     if (
       currencyOrigin == CurrencyEnum.USD &&
       currencyDestiny == CurrencyEnum.PEN
     ) {
-      return conversion.compra;
+      return {
+        tipoCambio: conversion.compra,
+        montoCambiado: monto * conversion.compra,
+      };
     }
+
+    throw new Error('Conversion currency not handled');
   }
 }

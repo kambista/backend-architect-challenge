@@ -1,9 +1,10 @@
 import { ConversionRepository } from '../../domain/conversion.repository';
 import { ConversionEntity } from '../../domain/conversion.entity';
-import axios from 'axios';
 import { ConversionSourceEnum } from '../../domain/conversion-source.enum';
 import { CurrencyEnum } from '../../domain/currency.enum';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class ConversionHttpRepository implements ConversionRepository {
   async obtainConversion(): Promise<ConversionEntity> {
     // const { data } = await axios.get('');
