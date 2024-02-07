@@ -1,0 +1,84 @@
+{
+	"info": {
+		"_postman_id": "a3bcf103-fba5-4822-a432-cf3f3d52e1ba",
+		"name": "Challenge-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16069405"
+	},
+	"item": [
+		{
+			"name": "Challenge",
+			"item": [
+				{
+					"name": "Get Historial",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"monedaOrigen\": \"PEN\",\r\n    \"monedaDestino\": \"USD\",\r\n    \"monto\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/exchanges?startDate=2024-02-04T05:17:41.568Z&endDate=2024-03-05T05:17:41.568Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"exchanges"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-02-04T05:17:41.568Z"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-03-05T05:17:41.568Z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create exchange",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"monedaOrigen\": \"USD\",\r\n    \"monedaDestino\": \"PEN\",\r\n    \"monto\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/exchanges",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"exchanges"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
