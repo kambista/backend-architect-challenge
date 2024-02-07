@@ -55,6 +55,7 @@ Previamente debe tener instalado:
        https://skaffold.dev/docs/install/#standalone-binary
 
       ````
+    Validar que el kubernetes context este en docker-desktop
    3. Una vez instalado el cli de skaffold adecuadamente. Ejecute el siguiente comando en el root del proyecto (nivel del archivo skaffold.yaml).
        ````shell
        skaffold dev
