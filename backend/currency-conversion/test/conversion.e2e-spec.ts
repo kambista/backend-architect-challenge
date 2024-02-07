@@ -16,6 +16,15 @@ describe('ConversionController (e2e)', () => {
     await app.init();
   });
 
+  beforeEach(async () => {
+    // Load data from provider
+    const response = await request(app.getHttpServer()).post('/conversions');
+    if (response.status != 201)
+      throw new Error(
+        'No pudo leer data desde el proveedor. Valide si la api sunat funciona correctamente',
+      );
+  });
+
   describe('GET /conversions', () => {
     test('Return data convertion valid', async () => {
       const response = await request(app.getHttpServer()).get('/conversions');

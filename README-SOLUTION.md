@@ -5,7 +5,22 @@ Resuelto Por: Gustavo Condezo
 ![Diagrama Solucion](diagrama_componentes_v1.jpg)
 
 Se considero:
-Observabilidad con trace , logs
+- Observabilidad con:
+  - trace : trazabilidad a traves de los servicios 
+  - logs
+  - BD Separadas por servicio
+
+Puntos adicionales por considerar:
+- Health-Check
+- Librerias de clases propias compartidas
+- 
+## Ejecucion de obtencion del TC del proveedor cada 30 Segundos
+El cron en general solo se puede ejecutar cada minuto como minimo, asi que se consideraron dos posibles artificios para lograr ejecutar cada 30 segundos.
+1. Cron de Kubernetes (Se aplico esta solucion por practicidad)
+   Se configura un cron cada minuto y este llama a la api POST /conversions del servicio currency-conversion , lo que activa un metodo para leer y guardar TC de la SUNAT
+2. Cron de Cloud Scheduller con cloud function  topicos (Se recomiendaria)
+![img.png](cron-30.png)
+
 
 ## Como ejecutar el proyecto en local:
 

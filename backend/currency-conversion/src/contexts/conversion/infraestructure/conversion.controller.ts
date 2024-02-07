@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, Post } from '@nestjs/common';
+import { Controller, Get, Headers, OnModuleInit, Post } from '@nestjs/common';
 import { RegisterConversionUseCaseImp } from './services/RegisterConversionUseCaseImpl';
 import { ConsultConversionUseCaseImp } from './services/ConsultConversionUseCaseImpl';
 import { ResponseConversionDto } from './dto/response-conversion.dto';
@@ -8,17 +8,22 @@ import { LoggerImpl } from '../../shared/conf/LoggerImpl';
 
 @ApiTags('conversion')
 @Controller('conversions')
-export class ConversionController {
+export class ConversionController implements OnModuleInit {
   constructor(
     private readonly registerConversionUseCase: RegisterConversionUseCaseImp,
     private readonly consultConversionUseCase: ConsultConversionUseCaseImp,
     private readonly tracer: TracerImpl,
     private readonly logger: LoggerImpl,
   ) {}
+  // Primera carga del proveedor sunat
+  async onModuleInit() {
+    await this.registerConversion();
+  }
 
   /**
    *   TODO: Buscar solucion para activar la obtencion del TC de sunat cada 30s
-   *   Se puede hacer con cron pero el tiempo minimo es 1 minuto y es neceeario buscar algun artificio
+   *   Se esta activando esta api con un cron de kubernetes (infra/cron.yaml) que se activa cada minuto, realizando
+   *   dos llamadas con un tiempo intermedio de 30 segundos
    *
    *   Otra opcion con GCP scheduller activar una Cloud Function cada minuto. Esta cloud function al arrancar y luego de 30s
    *   publicara a un topico y esta funcion estara suscrita, logrando ejecutarse cada 30 s
@@ -48,8 +53,6 @@ export class ConversionController {
       method: 'getCurrentConversion',
       message: 'Se consulta conversion',
     });
-
-    await this.registerConversion(); // TODO: Artificio para tener data, ya que la obtencion desde sunat no se esta ejecutando automaticamente
 
     return this.consultConversionUseCase.obtainCurrentConversion();
   }
