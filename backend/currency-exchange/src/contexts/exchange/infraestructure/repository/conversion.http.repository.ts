@@ -1,19 +1,24 @@
 import { ConversionRepository } from '../../domain/conversion.repository';
 import { ConversionEntity } from '../../domain/conversion.entity';
-import { ConversionSourceEnum } from '../../domain/conversion-source.enum';
-import { CurrencyEnum } from '../../domain/currency.enum';
+
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
+import * as process from 'process';
+import { TracerImpl } from '../../../shared/conf/TraceImpl';
 
 @Injectable()
 export class ConversionHttpRepository implements ConversionRepository {
+  constructor(private readonly tracer: TracerImpl) {}
   async obtainConversion(): Promise<ConversionEntity> {
-    // const { data } = await axios.get('');
-    return {
-      compra: 3.733,
-      venta: 3.739,
-      origen: ConversionSourceEnum.SUNAT,
-      moneda: CurrencyEnum.PEN,
-      fecha: '2024-01-18',
-    };
+    console.log('htttp');
+    const { data } = await axios.get(
+      process.env.SERVICE_CONVERSION_URL + '/conversions',
+      {
+        headers: {
+          traceid: this.tracer.getTrace(),
+        },
+      },
+    );
+    return data;
   }
 }

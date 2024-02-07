@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Exchange, ExchangeSchema } from './model/exchange.schema';
 import { ConsultExchangeUseCaseImp } from './services/ConsultExchangeUseCaseImpl';
 import { ConversionHttpRepository } from './repository/conversion.http.repository';
+import { LoggerImpl } from '../../shared/conf/LoggerImpl';
+import { TracerImpl } from '../../shared/conf/TraceImpl';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ConversionHttpRepository } from './repository/conversion.http.repositor
     ConsultExchangeUseCaseImp,
     ExchangeMongoRepository,
     ConversionHttpRepository,
+    LoggerImpl,
+    TracerImpl,
   ],
 })
 export class ExchangeModule {}

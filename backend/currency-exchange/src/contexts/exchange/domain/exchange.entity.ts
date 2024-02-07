@@ -9,6 +9,7 @@ export interface ExchangeEntity {
   tipoCambio: number;
   fecha: Date;
 
+  conversionId: string;
   createdAt: Date;
   updatedAt: Date;
 }

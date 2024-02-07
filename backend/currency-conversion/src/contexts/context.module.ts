@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ConversionModule } from './conversion/infraestructure/conversion.module';
 
 @Module({
-  imports: [],
+  imports: [ConversionModule],
 })
 export class ContextModule {}

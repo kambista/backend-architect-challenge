@@ -18,6 +18,8 @@ spec:
           env:
             - name: MONGO_URI
               value: 'mongodb://currency-exchange-mongo-srv:27017/currency-exchange'
+            - name: SERVICE_CONVERSION_URL
+              value: 'http://currency-conversion-srv:3000'
 ---
 
 apiVersion: v1
@@ -31,5 +33,5 @@ spec:
   ports:
     - name: currency-exchange
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 4000
+      targetPort: 4000

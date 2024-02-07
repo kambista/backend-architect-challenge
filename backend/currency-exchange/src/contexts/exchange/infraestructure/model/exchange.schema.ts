@@ -29,6 +29,9 @@ export class Exchange implements ExchangeEntity {
   tipoCambio: number;
 
   @Prop()
+  conversionId: string;
+
+  @Prop()
   createdAt: Date;
 
   @Prop()

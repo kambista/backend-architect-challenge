@@ -5,7 +5,7 @@ import { MongoBDConfiguration } from './contexts/shared/conf/MongoBDConfiguratio
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongoBDConfiguration(process.env.MONGO_URI!),
     ContextModule,
   ],

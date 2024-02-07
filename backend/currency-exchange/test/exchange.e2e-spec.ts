@@ -1,11 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Scope } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { ConversionHttpRepository } from '../src/contexts/exchange/infraestructure/repository/conversion.http.repository';
 import { ConversionSourceEnum } from '../src/contexts/exchange/domain/conversion-source.enum';
 import { CurrencyEnum } from '../src/contexts/exchange/domain/currency.enum';
 import { ResponseExchangeDto } from '../src/contexts/exchange/infraestructure/dto/response-exchange.dto';
+import { TracerImpl } from '../src/contexts/shared/conf/TraceImpl';
+
+jest.mock('../src/contexts/shared/conf/LoggerImpl');
 
 describe('ExchangeController (e2e)', () => {
   let app: INestApplication;
@@ -13,6 +16,7 @@ describe('ExchangeController (e2e)', () => {
   let conversionHttpRepository: ConversionHttpRepository;
 
   const conversion = {
+    id: '152354848',
     compra: 3.733,
     venta: 3.739,
     origen: ConversionSourceEnum.SUNAT,
@@ -21,24 +25,25 @@ describe('ExchangeController (e2e)', () => {
   };
 
   beforeEach(async () => {
-    jest.resetModules();
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(TracerImpl) //override Scoped requestº
+      .useValue({ log: jest.fn() })
+      .compile();
 
     conversionHttpRepository = moduleFixture.get<ConversionHttpRepository>(
       ConversionHttpRepository,
     );
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
 
     jest
       .spyOn(conversionHttpRepository, 'obtainConversion')
       .mockImplementation(async () => {
         return conversion;
       });
+
+    app = moduleFixture.createNestApplication();
+    await app.init();
   });
 
   describe('POST /exchanges', () => {

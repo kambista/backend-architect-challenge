@@ -24,9 +24,14 @@ export class ExchangeController {
   @Post()
   @ApiResponse({ type: ResponseExchangeDto, status: 201 })
   async registerExchange(@Body() createExchange: CreateExchangeDto) {
-    const exchange =
-      await this.registerExchangeUseCase.registerExchange(createExchange);
-    return new ResponseExchangeDto(exchange);
+    try {
+      const exchange =
+        await this.registerExchangeUseCase.registerExchange(createExchange);
+      return new ResponseExchangeDto(exchange);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 
   @ApiResponse({ type: ResponseExchangeDto, isArray: true, status: 200 })
@@ -45,17 +50,22 @@ export class ExchangeController {
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
   ) {
-    if (
-      !startDate ||
-      !endDate ||
-      !IsDateISOStringValid(startDate) ||
-      !IsDateISOStringValid(endDate)
-    )
-      throw new BadRequestException('Envie Date valido en millis');
+    try {
+      if (
+        !startDate ||
+        !endDate ||
+        !IsDateISOStringValid(startDate) ||
+        !IsDateISOStringValid(endDate)
+      )
+        throw new BadRequestException('Envie Date valido en millis');
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+      const start = new Date(startDate);
+      const end = new Date(endDate);
 
-    return this.consultExchangeUseCase.obtainExchanges(start, end);
+      return this.consultExchangeUseCase.obtainExchanges(start, end);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 }

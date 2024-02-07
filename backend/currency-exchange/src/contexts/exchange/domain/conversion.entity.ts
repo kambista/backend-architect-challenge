@@ -7,4 +7,5 @@ export interface ConversionEntity {
   origen: ConversionSourceEnum;
   moneda: CurrencyEnum;
   fecha: string;
+  id: string;
 }
